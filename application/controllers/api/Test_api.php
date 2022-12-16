@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Api extends RestController {
+class Test_api extends RestController {
 
     function __construct()
     {
