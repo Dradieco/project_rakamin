@@ -90,7 +90,7 @@ class User extends RestController {
                 if($insert > 0){
                     $this->response([
                         "status"    => true,
-                        "message"   => "Insert new User has Successfully"
+                        "message"   => "Insert new User has Success"
                     ], RestController::HTTP_CREATED);
                 }
                 else {
@@ -152,7 +152,7 @@ class User extends RestController {
                 if($update > 0){
                     $this->response([
                         "status"    => true,
-                        "message"   => "Update User has Successfully"
+                        "message"   => "Update User has Success"
                     ], RestController::HTTP_OK);
                 }
                 else {
@@ -203,7 +203,7 @@ class User extends RestController {
                 if($delete > 0){
                     $this->response([
                         "status"    => true,
-                        "message"   => "Delete User has Successfully"
+                        "message"   => "Delete User has Success"
                     ], RestController::HTTP_OK);
                 }
                 else {
