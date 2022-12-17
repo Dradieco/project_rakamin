@@ -15,7 +15,65 @@ class Message extends RestController {
 
     // Get
     public function index_get() {
-    
+        $account_number = $this->get("account_number");
+        $target_number  = $this->get("target_number");
+        $auth_key       = $this->get("auth_key");
+
+        $data_account   = $this->user->get_user_by_number($account_number);
+        $data_target    = $this->user->get_user_by_number($target_number);
+
+        $check_auth     = $this->user->check_auth($auth_key, $account_number);
+
+        if(empty($account_number)){
+            $this->response([
+                "status"    => false,
+                "message"   => "Account Number cannot be Empty"
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+        else if(empty($auth_key)){
+            $this->response([
+                "status"    => false,
+                "message"   => "Auth Key cannot be Empty"
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+        else if($check_auth == 0) {
+            $this->response([
+                "status"    => false,
+                "message"   => "You are Unauthorized to Access This Function"
+            ], RestController::HTTP_UNAUTHORIZED);
+        }
+        else {
+            $meta_message = [];
+
+            if(empty($target_number)) {
+                $data = $this->message->get_all_conversation($data_account['user_id']);
+
+                $meta_message = $data;
+            }
+            else {
+                $data = $this->message->get_conversation($data_account['user_id'], $data_target['user_id'])->result_array();
+                
+                $meta_message = [
+                    "Person 1"      => $data_account['username'],
+                    "Person 2"      => $data_target['username'],
+                    "data_message"  => $data
+                ];
+            }
+
+            if(!empty($data)) {
+                $this->response([
+                    "status"    => true,
+                    "message"   => "Data Conversation Found",
+                    "data"      => $meta_message
+                ], RestController::HTTP_OK);
+            }
+            else {
+                $this->response([
+                    "status"    => false,
+                    "message"   => "Data Conversation Not Found"
+                ], RestController::HTTP_NOT_FOUND);
+            }
+        }
     }
 
     // POST
@@ -72,7 +130,7 @@ class Message extends RestController {
                 $message_id         = $this->uuid->gen_id_unique("user_message", "message_id", "MSG", "5");
 
                 // Check Conversation from this sender or target number if exist then use id existing
-                $model_conversation = $this->message->check_conversation($data_sender['user_id'], $data_receiver['user_id']);
+                $model_conversation = $this->message->get_conversation($data_sender['user_id'], $data_receiver['user_id']);
                 $conversation_exist = $model_conversation->num_rows();
                 $data_conversation  = $model_conversation->row_array();
 
