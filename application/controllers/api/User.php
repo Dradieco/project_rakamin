@@ -203,7 +203,7 @@ class User extends RestController {
                 if($delete > 0){
                     $this->response([
                         "status"    => true,
-                        "message"   => "Delete User has Success"
+                        "message"   => "Delete User with Number : ".$phonenumber." has Success"
                     ], RestController::HTTP_OK);
                 }
                 else {

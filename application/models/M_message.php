@@ -30,4 +30,10 @@ class M_message extends CI_Model {
         return $this->db->affected_rows();
     }
 
+    // DELETE DATA
+    public function delete_message($where) {
+        $this->db->delete("user_message", $where);
+        
+        return $this->db->affected_rows();
+    }
 }

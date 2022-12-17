@@ -28,13 +28,13 @@ class Message extends RestController {
         if(empty($sender_number)){
             $this->response([
                 "status"    => false,
-                "message"   => "Username cannot be Empty"
+                "message"   => "Sender Number cannot be Empty"
             ], RestController::HTTP_BAD_REQUEST);
         }
         else if(empty($receiver_number)){
             $this->response([
                 "status"    => false,
-                "message"   => "Phone Number cannot be Empty"
+                "message"   => "Receiver Number cannot be Empty"
             ], RestController::HTTP_BAD_REQUEST);
         }
         else if(empty($auth_key)){
@@ -121,6 +121,121 @@ class Message extends RestController {
 
     // DELETE
     public function index_delete(){
-
+        $phonenumber        = $this->delete("phonenumber");
+        $message_id         = $this->delete("message_id");
+        $conversation_id    = $this->delete("conversation_id");
+        $del_type           = $this->delete("del_type");
+        $auth_key           = $this->delete("auth_key");
+        
+        if(empty($del_type) || ($del_type != "message" && $del_type != "conversation") ) {
+            $this->response([
+                "status"    => false,
+                "message"   => "Choose Delete Type (message / conversation)"
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+        else {
+            if($del_type == "message") {
+                $where = [
+                    "message_id"       => $message_id,
+                    "status"        => 1
+                ];
+        
+                if(empty($phonenumber)){
+                    $this->response([
+                        "status"    => false,
+                        "message"   => "Phone Number cannot be Empty"
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+                if(empty($message_id)){
+                    $this->response([
+                        "status"    => false,
+                        "message"   => "Message ID cannot be Empty!"
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+                if(empty($auth_key)){
+                    $this->response([
+                        "status"    => false,
+                        "message"   => "Auth Key cannot be Empty"
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+                else{
+                    $check_auth = $this->user->check_auth($auth_key, $phonenumber);
+        
+                    if($check_auth == 0) {
+                        $this->response([
+                            "status"    => false,
+                            "message"   => "You are Unauthorized to Access This Function"
+                        ], RestController::HTTP_UNAUTHORIZED);
+                    }
+                    else {
+                        $delete = $this->message->delete_message($where);
+                
+                        if($delete > 0){
+                            $this->response([
+                                "status"    => true,
+                                "message"   => "Delete Message with Message ID : ".$message_id." has Success"
+                            ], RestController::HTTP_OK);
+                        }
+                        else {
+                            $this->response([
+                                "status"    => false,
+                                "message"   => "No Data to be Deleted"
+                            ], RestController::HTTP_BAD_REQUEST);
+                        }
+                    }
+                }
+            }
+            else {
+                $where = [
+                    "conversation_id"   => $conversation_id,
+                    "status"            => 1
+                ];
+        
+                if(empty($phonenumber)){
+                    $this->response([
+                        "status"    => false,
+                        "message"   => "Phone Number cannot be Empty"
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+                if(empty($conversation_id)){
+                    $this->response([
+                        "status"    => false,
+                        "message"   => "Conversation ID cannot be Empty!"
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+                if(empty($auth_key)){
+                    $this->response([
+                        "status"    => false,
+                        "message"   => "Auth Key cannot be Empty"
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+                else{
+                    $check_auth = $this->user->check_auth($auth_key, $phonenumber);
+        
+                    if($check_auth == 0) {
+                        $this->response([
+                            "status"    => false,
+                            "message"   => "You are Unauthorized to Access This Function"
+                        ], RestController::HTTP_UNAUTHORIZED);
+                    }
+                    else {
+                        $delete = $this->message->delete_message($where);
+                
+                        if($delete > 0){
+                            $this->response([
+                                "status"    => true,
+                                "message"   => "Delete Conversation with Conversation ID : ".$conversation_id." has Success"
+                            ], RestController::HTTP_OK);
+                        }
+                        else {
+                            $this->response([
+                                "status"    => false,
+                                "message"   => "No Data to be Deleted"
+                            ], RestController::HTTP_BAD_REQUEST);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
