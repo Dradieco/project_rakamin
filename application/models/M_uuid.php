@@ -2,11 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_uuid extends CI_Model {
-    public function gen_id_unique($table_name, $column_name, $string){
+    public function gen_id_unique($table_name, $column_name, $string, $count_string = "3"){
         $id = '';
 
         do{
-            $random_string = random_string("numeric", "3");
+            $random_string = random_string("numeric", $count_string);
             $unique_id =  $string."-".$random_string;
 
             $check = $this->db->get_where($table_name, [$column_name => $id])->num_rows();
