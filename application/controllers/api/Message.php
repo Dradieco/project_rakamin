@@ -50,34 +50,11 @@ class Message extends RestController {
             ], RestController::HTTP_OK);
         }
         else{
-            $message_id         = $this->uuid->gen_id_unique("user_message", "message_id", "MSG", "5");
         
             $data_sender        = $this->user->get_user_by_number($sender_number);
             $data_receiver      = $this->user->get_user_by_number($receiver_number);
-
-            // Check Conversation from this sender or target number if exist then use id existing
-            $model_conversation = $this->message->check_conversation($data_sender['user_id'], $data_receiver['user_id']);
-            $conversation_exist = $model_conversation->num_rows();
-            $data_conversation  = $model_conversation->row_array();
-
-            if($conversation_exist > 0 ){
-                $conversation_id    = $data_conversation['conversation_id'];
-            }
-            else {
-                $conversation_id    = $this->uuid->gen_id_unique("user_message", "conversation_id", "COV", "5");
-            }
             
             $check_auth         = $this->user->check_auth($auth_key, $sender_number);
-
-            $data = [
-                "conversation_id"   => $conversation_id,
-                "message_id"        => $message_id,
-                "sender_user_id"    => $data_sender['user_id'],
-                "receiver_user_id"  => $data_receiver['user_id'],
-                "message"           => $message,
-                // Default every send a message will flag unread until user access their message
-                "is_read"           => 0
-            ];
 
             if($check_auth == 0) {
                 $this->response([
@@ -85,7 +62,37 @@ class Message extends RestController {
                     "message"   => "You are Unauthorized to Access This Function"
                 ], RestController::HTTP_UNAUTHORIZED);
             }
-            else {
+            else if(empty($data_receiver)) {
+                $this->response([
+                    "status"    => false,
+                    "message"   => "Target Number not found in the Database"
+                ], RestController::HTTP_NOT_FOUND);
+            }
+            else {            
+                $message_id         = $this->uuid->gen_id_unique("user_message", "message_id", "MSG", "5");
+
+                // Check Conversation from this sender or target number if exist then use id existing
+                $model_conversation = $this->message->check_conversation($data_sender['user_id'], $data_receiver['user_id']);
+                $conversation_exist = $model_conversation->num_rows();
+                $data_conversation  = $model_conversation->row_array();
+
+                if($conversation_exist > 0 ){
+                    $conversation_id    = $data_conversation['conversation_id'];
+                }
+                else {
+                    $conversation_id    = $this->uuid->gen_id_unique("user_message", "conversation_id", "COV", "5");
+                }
+                
+                $data = [
+                    "conversation_id"   => $conversation_id,
+                    "message_id"        => $message_id,
+                    "sender_user_id"    => $data_sender['user_id'],
+                    "receiver_user_id"  => $data_receiver['user_id'],
+                    "message"           => $message,
+                    // Default every send a message will flag unread until user access their message
+                    "is_read"           => 0
+                ];
+
                 $insert = $this->message->insert_new_message($data);
         
                 if($insert > 0){
