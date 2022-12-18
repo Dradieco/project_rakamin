@@ -103,7 +103,7 @@ class User extends RestController {
         }
     }
 
-    // UPDATE
+    // PUT
     public function index_put(){
         $username = $this->put("username");
         $phonenumber = $this->put("phonenumber");

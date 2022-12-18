@@ -24,7 +24,7 @@ class M_message extends CI_Model {
                     AND
                         us.status = 1
                     LIMIT 1
-                ) as username,
+                ) as target_username,
                 (
                     SELECT 
                         us.phonenumber 
@@ -35,7 +35,7 @@ class M_message extends CI_Model {
                     AND
                         us.status = 1
                     LIMIT 1
-                ) as phonenumber,
+                ) as target_phonenumber,
                 (
                     SELECT 
                         a.message 
@@ -111,6 +111,13 @@ class M_message extends CI_Model {
     // POST DATA
     public function insert_new_message($data) {
         $this->db->insert("user_message", $data);
+        
+        return $this->db->affected_rows();
+    }
+
+    // UPDATE DATA
+    public function update_read_message($data, $where) {
+        $this->db->update("user_message", $data, $where);
         
         return $this->db->affected_rows();
     }
