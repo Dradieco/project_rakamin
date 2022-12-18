@@ -19,5 +19,5 @@ https://github.com/Dradieco/project_rakamin
 
 ## How to Run ?
 
-- Import the file database in the folder database to your own database with the name of the database is [api_simple_chat]()
+- Import the file database in the folder database to your own database with the name of the database is [api_simple_chat](https://github.com/Dradieco/project_rakamin/tree/main/database)
 - Open XAMPP and Start **Apache** and **MySql**
