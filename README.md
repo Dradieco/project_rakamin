@@ -1,6 +1,6 @@
 # project_rakamin - Simple API Chat
 
-With **CodeIgniter 3** <br>
+With [**CodeIgniter 3**](https://codeigniter.com/userguide3/general/welcome.html) <br>
 https://github.com/Dradieco/project_rakamin
 
 ## Requirements
