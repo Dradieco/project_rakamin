@@ -1,10 +1,12 @@
 # project_rakamin - Simple API Chat
 
+With **CodeIgniter 3** <br>
 https://github.com/Dradieco/project_rakamin
 
 ## Requirements
 
-- CodeIgniter 3 v3.1.11 or greater [Link Download](https://codeigniter.com/userguide3/installation/downloads.html)
+<!-- - CodeIgniter 3 v3.1.11 or greater [Link Download](https://codeigniter.com/userguide3/installation/downloads.html) -->
+
 - XAMPP 7.4.33 or greater [Link Download](https://www.apachefriends.org/download.html)
 - Postman [Link Download](https://www.postman.com/downloads/)
 - Composer [Link Download](https://getcomposer.org/)
