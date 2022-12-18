@@ -7,44 +7,81 @@ class M_message extends CI_Model {
     public function get_all_conversation($sender_user_id) {
         $query = $this->db->query("
             SELECT
-                conversation_id,
+                DISTINCT(msg.conversation_id),
+                CASE
+                    WHEN 
+                        msg.sender_user_id != '$sender_user_id' THEN msg.sender_user_id
+                    WHEN 
+                        msg.receiver_user_id != '$sender_user_id' THEN msg.receiver_user_id
+                END as target_user_id,
+                (
+                    SELECT 
+                        us.username 
+                    FROM 
+                        user as us
+                    WHERE 
+                        us.user_id = target_user_id
+                    AND
+                        us.status = 1
+                    LIMIT 1
+                ) as username,
+                (
+                    SELECT 
+                        us.phonenumber 
+                    FROM 
+                        user as us
+                    WHERE 
+                        us.user_id = target_user_id
+                    AND
+                        us.status = 1
+                    LIMIT 1
+                ) as phonenumber,
                 (
                     SELECT 
                         a.message 
                     FROM 
                         user_message as a 
                     WHERE 
-                        a.conversation_id = conversation_id 
+                        a.conversation_id = msg.conversation_id
                     AND
                         a.status = 1
                     ORDER BY
-                        a.ts_insert
+                        a.ts_insert DESC
                     LIMIT 1
                 ) as last_message,
+                (
+                    SELECT 
+                        a.ts_insert 
+                    FROM 
+                        user_message as a 
+                    WHERE 
+                        a.conversation_id = msg.conversation_id
+                    AND
+                        a.status = 1
+                    ORDER BY
+                        a.ts_insert DESC
+                    LIMIT 1
+                ) as datetime_last_message,
                 (
                     SELECT 
                         COUNT(*)
                     FROM 
                         user_message as b
                     WHERE 
-                        b.conversation_id = conversation_id 
+                        b.conversation_id = msg.conversation_id 
                     AND
                         b.status = 1
                     AND
                         b.is_read = 0
-                    ORDER BY
-                        b.ts_insert
                 ) as Unread_count
             FROM
-                user_message
+                user_message as msg
             WHERE
-                (sender_user_id = '$sender_user_id'
+                (msg.sender_user_id = '$sender_user_id'
                 OR
-                receiver_user_id = '$sender_user_id')
-            GROUP BY
-                conversation_id
-            ORDER BY
-                ts_insert ASC
+                msg.receiver_user_id = '$sender_user_id')
+            AND
+                msg.status = 1
         ")->result_array();
         
         return $query;
