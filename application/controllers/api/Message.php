@@ -179,16 +179,20 @@ class Message extends RestController {
 
     // PUT
     public function index_put() {
-        $account_number     = $this->get("account_number");
-        $conversation_id    = $this->get("conversation_id");
-        $auth_key           = $this->get("auth_key");
+        $account_number     = $this->put("account_number");
+        $conversation_id    = $this->put("conversation_id");
+        $auth_key           = $this->put("auth_key");
 
+        $data_account   = $this->user->get_user_by_number($account_number);
+
+        // Update Data when this user id in the column receiver_user_id on db
         $data = [
             "is_read"   => 1
         ];
         
         $where = [
             "conversation_id"   => $conversation_id,
+            "receiver_user_id"  => $data_account['user_id'],
             "status"            => 1
         ];
 
@@ -200,10 +204,10 @@ class Message extends RestController {
                 "message"   => "Account Number cannot be Empty"
             ], RestController::HTTP_BAD_REQUEST);
         }
-        else if(empty($account_number)){
+        else if(empty($conversation_id)){
             $this->response([
                 "status"    => false,
-                "message"   => "Target Number cannot be Empty"
+                "message"   => "Conversation ID cannot be Empty"
             ], RestController::HTTP_BAD_REQUEST);
         }
         else if(empty($auth_key)){
@@ -229,9 +233,9 @@ class Message extends RestController {
             }
             else {
                 $this->response([
-                    "status"    => false,
+                    "status"    => true,
                     "message"   => "No Data to be Updated"
-                ], RestController::HTTP_BAD_REQUEST);
+                ], RestController::HTTP_OK);
             }
 
         }

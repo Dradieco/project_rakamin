@@ -157,9 +157,9 @@ class User extends RestController {
                 }
                 else {
                     $this->response([
-                        "status"    => false,
+                        "status"    => true,
                         "message"   => "No Data to be Updated"
-                    ], RestController::HTTP_BAD_REQUEST);
+                    ], RestController::HTTP_OK);
                 }
             }
         }

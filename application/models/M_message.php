@@ -70,6 +70,8 @@ class M_message extends CI_Model {
                     WHERE 
                         b.conversation_id = msg.conversation_id 
                     AND
+                        b.receiver_user_id = '$sender_user_id'
+                    AND
                         b.status = 1
                     AND
                         b.is_read = 0
