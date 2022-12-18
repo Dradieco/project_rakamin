@@ -7,7 +7,7 @@ class Message extends RestController {
 
     function __construct() {
         parent::__construct();
-
+        
         $this->load->model("M_uuid", "uuid");
         $this->load->model("M_user", "user");
         $this->load->model("M_message", "message");
