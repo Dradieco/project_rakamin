@@ -19,15 +19,15 @@ class User extends RestController {
         $number = $this->get("phonenumber");
         
         // Menampilkan data berdasarkan nama dan nomor
-        if(!empty($name) && !empty($nomor)){
-            $data = $this->user->get_user_by_name_number($name, $nomor);
+        if(!empty($name) && !empty($number)){
+            $data = $this->user->get_user_by_name_number($name, $number);
         }
         // Menampilkan data berdasarkan nomor
         else if(!empty($number)){
             $data = $this->user->get_user_by_number($number);
         }
         // Menampilkan data berdasarkan nama
-        if(!empty($name)) {
+        else if(!empty($name)) {
             $data = $this->user->get_user_by_name($name);
         }
         // Manampilkan semua data user
