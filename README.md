@@ -18,4 +18,4 @@ https://github.com/Dradieco/project_rakamin
 
 - Open XAMPP and Start **Apache** and **MySql**
 - Import the file database to your own database with the name of the database is [api_simple_chat](https://github.com/Dradieco/project_rakamin/tree/main/database) (For this project i'm using **localhost**)
-- Open Postman or click [link](https://www.postman.com/rickyraven20/workspace/mini-project-rakamin) for the reference to use the API that i have made
+- Open Postman or click [link](https://www.postman.com/rickyraven20/workspace/mini-project-rakamin) for the reference to use the API
