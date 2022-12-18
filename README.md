@@ -6,13 +6,13 @@ https://github.com/Dradieco/project_rakamin
 
 - CodeIgniter 3 v3.1.11 or greater [Link Download](https://codeigniter.com/userguide3/installation/downloads.html)
 - XAMPP 7.4.33 or greater [Link Download](https://www.apachefriends.org/download.html)
-- Postman for test the API Running [Link Download](https://www.postman.com/downloads/)
+- Postman [Link Download](https://www.postman.com/downloads/)
 - Composer [Link Download](https://getcomposer.org/)
 
 ## References
 
 - API architecture standard REST. see [reference](https://github.com/chriskacerguis/codeigniter-restserver)
-- Unit Test for this project is PHPUnit. see [reference](https://github.com/kenjis/ci-phpunit-test)
+<!-- - Unit Test for this project is PHPUnit. see [reference](https://github.com/kenjis/ci-phpunit-test) -->
 
 ## How to Run ?
 
